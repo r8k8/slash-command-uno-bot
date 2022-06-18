@@ -6,7 +6,6 @@ from discord import app_commands
 import json
 import discord.ui
 import asyncio
-from unkill import keep_alive
 
 #guilds = [discord.Object(id=598899910770950207),discord.Object(id=951628817770885180),discord.Object(id=683688010188980266)]
 
@@ -354,66 +353,5 @@ def end_game():
   client.to_be_drawn = 0
   client.wildcolor = ""
 
-keep_alive()  
 client.run(os.getenv("TOKEN"))
 
-
-'''    await interaction.response.defer()
-    client.in_progress = True # prevent other games from being started 
-    uno.initialize() #preparations for the UNO game (decks,discards,setting up players)
-    for i in range(len(client.enqueued)): 
-      players.append(uno.Player(client.enqueued[i].name,uno.drawCards(5)))# every user that is currently "enqueued" in a lobby is assigned a player object 
-    turn = 0 #used to iterate over turn list
-    reversed = False #flag whether the turn order is in reverse
-    skipped = False #flag to see if the next turn is to be skipped
-    await interaction.channel.send(f"Session started! List of Players:\n{' | '.join([u.name for u in client.enqueued])}")
-    await asyncio.sleep(1)
-    while client.in_progress: # the game loop essentially
-      if not skipped:
-        players[turn].turn = True            
-        await interaction.followup.send(f"{players[turn].name}'s turn.\nCards discarded: {len(uno.discards)}",file=discord.File(fp=uno.current_discard(),filename="current.png"))# message in question that uses the buttons from the view
-        while client.limbo:
-            pass #this is to prevent the game from progressing until a player makes their move
-        client.limbo=True 
-        players[turn].turn = False
-      else:
-        await interaction.channel.send(f"{players[turn].name}'s turn has been skipped!")
-        skipped = False
-      turn += 1
-      if turn == len(players):
-            turn = 0
-      if reversed:
-            players.reverse()                     
-    uno.reset()
-    client.enqueued = []'''
-    
-          
-    # while client.in_progress: # the game loop essentially
-    #   if not skipped:
-    #     client.players[turn].turn = True            
-    #     await channel.send(f"{client.players[turn].name}'s turn.\nCards discarded: {len(uno.discards)}",file=discord.File(fp=uno.current_discard(),filename="current.png"))# message in question that uses the buttons from the view
-    #     while client.limbo:
-    #         pass #this is to prevent the game from progressing until a player makes their move
-    #     client.limbo=True 
-    #     client.players[turn].turn = False
-    #   else:
-    #     await channel.send(f"{client.players[turn].name}'s turn has been skipped!")
-    #     skipped = False
-    #   turn += 1
-    #   if turn == len(client.players):
-    #         turn = 0
-    #   if reversed:
-    #         client.players.reverse()                     
-    #uno.reset()
-    #client.enqueued = []
-
-# @tree.command(name = "unotest",description="posts uno cards",guilds=guilds)
-# async def self(interaction:discord.Interaction,amount:int=2):
-#   if client.in_progress:
-#     await interaction.response.send_message("Wait until the current round has finished")
-#   else:
-#     initialize()
-#     p1 = uno.Player("1",uno.drawCards(amount))
-#     hand = discord.File(fp=p1.showHand(),filename="hand.png")
-#     await interaction.response.send_message(file=hand)
-#     reset()
