@@ -7,8 +7,6 @@ import json
 import discord.ui
 import asyncio
 
-#guilds = [discord.Object(id=598899910770950207),discord.Object(id=951628817770885180),discord.Object(id=683688010188980266)]
-
 class aclient(discord.Client):
     def __init__(self):
       intents=discord.Intents.default()
@@ -39,14 +37,7 @@ class aclient(discord.Client):
     async def on_ready(self):
       await self.wait_until_ready()
       if not self.synced:
-        await tree.sync(guild = None)
-        #global guilds
-        #for g in range(len(guilds(self))):
-          #await tree.sync(guild=guilds(self)[g])
-        #await tree.sync(guild=discord.Object(id=951628817770885180)) 
-        #await tree.sync(guild=discord.Object(id=598899910770950207))
-        #await tree.sync(guild=discord.Object(id=683688010188980266))
-        
+        await tree.sync(guild = None)        
       print(f"logged in as user {self.user}")
       if self.synced:
             print("synced!")
