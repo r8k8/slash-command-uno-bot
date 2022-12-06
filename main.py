@@ -6,7 +6,7 @@ from discord import app_commands
 import json
 import discord.ui
 import asyncio
-from unkill import keep_alive
+#from unkill import keep_alive
 
 #guilds = [discord.Object(id=598899910770950207),discord.Object(id=951628817770885180),discord.Object(id=683688010188980266)]
 
@@ -354,8 +354,8 @@ def end_game():
   client.to_be_drawn = 0
   client.wildcolor = ""
 
-keep_alive()  
-client.run("TOKEN")
+#keep_alive()  
+client.run(os.getenv("TOKEN"))
 
 
 '''    await interaction.response.defer()
