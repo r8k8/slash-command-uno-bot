@@ -1,11 +1,53 @@
 from PIL import Image
 from collections import deque
-from random import shuffle
+from random import shuffle,choice,randint
 import io
 unoDeck = []
 discards = deque()
 players = []
 #playDirection = 1
+
+class Game():
+    '''Game class to store all game related data and functions'''
+    def __init__(self):
+        self.unoDeck = buildDeck()
+        self.discards = deque()
+        self.players = []
+        for card in self.unoDeck:
+            if str(type(card)) == "<class 'tuple'>" and card[1] not in ["+2","Skip","Reverse"]:
+                self.discards.appendleft(self.unoDeck.pop(self.unoDeck.index(card)))
+                break
+
+    def drawCards(self, numCards: int):
+        if numCards > len(self.unoDeck):
+            last_dsc = self.discards.popleft()
+            self.discards = deque()
+            self.discards.appendleft(last_dsc)
+            self.unoDeck = buildDeck()
+            self.unoDeck.remove(last_dsc)              
+        return [self.unoDeck.pop() for x in range(numCards)]
+    
+    def current_discard(self):
+        """card on top of the discard heap 
+
+        Args:
+            wildcolor (str, optional): Chosen color of the wildcard if applicable. Defaults to "".
+
+        Returns:
+            Byte Array of Image: to be posted as file on discord
+        """
+        if "Wild" in self.discards[0] or "Wild +4" in self.discards[0]:
+            a = self.discards[0]
+            m=a.replace("ild","")
+            return image_to_byte_array(Image.open(f"assets/{m}.png"))
+        else:
+            bg = Image.open(f"assets/{self.discards[0][0]}.png")
+            fr = Image.open(f"assets/{self.discards[0][1]}.png")
+            bg= bg.convert("RGBA")
+            fr= fr.convert("RGBA")
+            bg.paste(fr,mask=fr)
+            return (image_to_byte_array(bg))
+
 
 def buildDeck()->list:
     """
@@ -69,7 +111,12 @@ def drawCards(numCards):
 
 class Player:
     def __init__(self,name,hand):
-        self.name = name
+        self.is_ai = False
+        if name:
+            self.name = name
+        else:
+            self.name = choice(["AI","CPU","Robot","Computer","Player","joe biden","amogus"]) + " " + str(randint(1,300))
+            self.is_ai = True        
         self.hand = hand           
         self.turn = False
         self.has_to_draw = False
@@ -98,10 +145,13 @@ class Player:
         #im.show()
         return image_to_byte_array(im)
     
-    def canPlay(self):
-        playable = [card for card in self.hand if card in ["Wild","Wild +4"] or card[0]==discards[0][0] or card[1]==discards[0][1] or card[0] in discards[0]]
+    def canPlay(self,game:Game):
+        playable = [card for card in self.hand if card in ["Wild","Wild +4"] or card[0]==game.discards[0][0] or card[1]==game.discards[0][1] or card[0] in game.discards[0]]
         #playable.extend([card for card in self.hand if discards[0][0] in card])
         return playable  
+
+
+
 
 def current_discard(wildcolor=""):
     """card on top of the discard heap 
@@ -132,12 +182,3 @@ def image_to_byte_array(image: Image) -> bytes:
 
 
             
-# initialize()    
-# p1 = Player("1",drawCards(7))
-# players.append(p1)
-# #p1.showHand()
-# print(p1.hand)
-# print(discards)
-# discards.appendleft("WildB")
-# print(discards)
-# print(p1.canPlay())

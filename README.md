@@ -1,4 +1,8 @@
 # slash-command-uno-bot-
-my version of a uno bot made in discord.py 2.0
+UNO bot using discord.py 2.0 that supports slash commands
 
-change the bot token 
+The bot token needs to be added inside the token.txt 
+# Dependencies:
+``pip install -U -r requirements.txt``
+
+
